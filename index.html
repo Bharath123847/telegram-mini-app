@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earn Rewards</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        .user-info h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .offer-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .offer-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .offer-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .offer-card p {
+            margin: 5px 0 0;
+            font-size: 0.9rem;
+        }
+
+        .offer-card button {
+            background: #2575fc;
+            border: none;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .offer-card button:hover {
+            background: #6a11cb;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Earn Rewards</h1>
+
+    <!-- User Information -->
+    <div class="user-info">
+        <h2>Welcome, <span id="username">User</span>!</h2>
+        <p>Balance: <span id="balance">0</span> points</p>
+        <p>Referrals: <span id="referrals">0</span></p>
+    </div>
+
+    <!-- Offers Container -->
+    <div class="offer-container">
+        <!-- Survey Offer -->
+        <div class="offer-card" onclick="completeOffer('survey')">
+            <h3>📝 Complete Survey</h3>
+            <p>Earn 50 points by completing a quick survey.</p>
+            <button>Start Survey</button>
+        </div>
+
+        <!-- CPA Offer -->
+        <div class="offer-card" onclick="completeOffer('cpa')">
+            <h3>📋 CPA Offer</h3>
+            <p>Earn 100 points by completing this offer.</p>
+            <button>View Offer</button>
+        </div>
+
+        <!-- Shortlink Offer -->
+        <div class="offer-card" onclick="completeOffer('shortlink')">
+            <h3>🔗 Solve Shortlink</h3>
+            <p>Earn 10 points by solving this shortlink.</p>
+            <button>Open Link</button>
+        </div>
+
+        <!-- Video Ad Offer -->
+        <div class="offer-card" onclick="completeOffer('video')">
+            <h3>📺 Watch Video</h3>
+            <p>Earn 20 points by watching a short video.</p>
+            <button>Watch Video</button>
+        </div>
+
+        <!-- Custom Task Offer -->
+        <div class="offer-card" onclick="completeOffer('task')">
+            <h3>📲 Custom Task</h3>
+            <p>Earn 15 points by completing this task.</p>
+            <button>Start Task</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Telegram Web App
+        const tg = Telegram.WebApp;
+
+        // Fetch user data from Telegram
+        const user = tg.initDataUnsafe.user;
+        if (user) {
+            document.getElementById('username').innerText = user.first_name || 'User';
+        }
+
+        // Function to handle offer completion
+        function completeOffer(offerType) {
+            let reward = 0;
+            switch (offerType) {
+                case 'survey':
+                    reward = 50;
+                    break;
+                case 'cpa':
+                    reward = 100;
+                    break;
+                case 'shortlink':
+                    reward = 10;
+                    break;
+                case 'video':
+                    reward = 20;
+                    break;
+                case 'task':
+                    reward = 15;
+                    break;
+            }
+
+            // Send data back to the bot
+            tg.sendData(JSON.stringify({ type: offerType, reward: reward }));
+            tg.close();
+        }
+    </script>
+</body>
+</html>
