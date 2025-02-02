@@ -50,6 +50,14 @@
 <body>
     <h1>Earn Rewards</h1>
 
+ <!-- User Information -->
+    <div class="user-info">
+        <h2>Welcome, <span id="username">User</span>!</h2>
+        <p>Balance: <span id="balance">0</span> points</p>
+        <p>Referrals: <span id="referrals">0</span></p>
+    </div>
+
+    
     <!-- Offer Cards -->
     <div class="offer-card" onclick="completeOffer('survey')">
         <h3>📝 Complete Survey</h3>
@@ -82,6 +90,14 @@
     </div>
 
     <script>
+
+ // Fetch user data from Telegram
+        const user = tg.initDataUnsafe.user;
+        if (user) {
+            document.getElementById('username').innerText = user.first_name || 'User';
+        }
+
+        
         // Function to handle offer completion
         function completeOffer(offerType) {
             let reward = 0;
